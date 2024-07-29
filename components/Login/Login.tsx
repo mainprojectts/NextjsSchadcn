@@ -1,7 +1,7 @@
 import LoginRegister from "@/components/LoginRegister/LoginRegister";
 
 
-export default function CardWithForm() {
+export default function Login() {
   const type = "Login";
 
   return (

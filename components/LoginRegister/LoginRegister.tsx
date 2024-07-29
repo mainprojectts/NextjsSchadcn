@@ -1,4 +1,5 @@
 import * as React from "react"
+import { useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -21,8 +22,16 @@ import {
 interface LoginRegisterProps {
     type: string;
   }
+  type UserType={
+    username:string;
+    password:string
+  }
 
-  const LoginRegister: React.FC<LoginRegisterProps> = ({ type }) => {  return (
+  const LoginRegister: React.FC<LoginRegisterProps> = ({ type }) => {  
+    
+    const [user,SetUser]=useState<UserType | null >(null)
+
+    return (
     <Card className="w-[350px] mt-8 mx-auto">
       <CardHeader>
         <CardTitle> {type} </CardTitle>
