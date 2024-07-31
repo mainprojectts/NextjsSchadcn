@@ -1,7 +1,8 @@
-import * as React from "react"
-import { useState } from "react"
+"use client"
+import * as React from "react";
+import { useState } from "react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,29 +10,80 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
+import api from "@/public/constants/api";
+import { useRouter } from "next/navigation";
+import { Constants } from "@/public/constants/constants";
 interface LoginRegisterProps {
-    type: string;
-  }
-  type UserType={
-    username:string;
-    password:string
+  type: string;
+  url:string;
+  setIsSuccess?: React.Dispatch<React.SetStateAction<boolean>> ;
+}
+type UserType = {
+  username: string;
+  password: string;
+};
+
+const LoginRegister: React.FC<LoginRegisterProps> = ({ type,url,setIsSuccess }) => {
+  const [user, SetUser] = useState<UserType | null>(null);
+  const router=useRouter()
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = event.target;
+
+    SetUser((prev) => {
+      if (prev === null) {
+        return { [id]: value } as UserType;
+      }
+      return { ...prev, [id]: value };
+    });
+  };
+  console.log(process.env,'log');
+
+  const handleClick= async(event:React.MouseEvent<HTMLButtonElement>)=>{
+      event.preventDefault()
+      if(user && user.username && user.password){
+        try{
+          const response=await api.post(url,{
+            username:user.username,
+            password:user.password
+          })
+          if(type==="Login"){
+            localStorage.setItem(Constants.ACCESS_TOKEN,response.data.access)
+            localStorage.setItem(Constants.REFRESH_TOKEN,response.data.refresh)
+            if(setIsSuccess){
+              setIsSuccess(prev=>!prev) 
+            }
+          }
+          else if(type=="Register"){
+            router.push("/register")
+          }
+          console.log(response);
+          
+        }
+        catch(error){
+          console.log(`Error during api call ${error}`);
+          
+        }
+      }else{
+        console.log(`Username and password are required`);
+        
+      }
+
   }
 
-  const LoginRegister: React.FC<LoginRegisterProps> = ({ type }) => {  
-    
-    const [user,SetUser]=useState<UserType | null >(null)
+  console.log(user, "checkUserr");
 
-    return (
+  return (
     <Card className="w-[350px] mt-8 mx-auto">
       <CardHeader>
         <CardTitle> {type} </CardTitle>
@@ -42,11 +94,19 @@ interface LoginRegisterProps {
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="username">Username</Label>
-              <Input id="username" placeholder="Type your username" />
+              <Input
+                id="username"
+                placeholder="Type your username"
+                onChange={handleChange}
+              />
             </div>
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="framework">Password</Label>
-              <Input id="password" placeholder="Type your password"/>
+              <Input
+                id="password"
+                placeholder="Type your password"
+                onChange={handleChange}
+              />
               {/* <Select>
                 <SelectTrigger id="framework">
                   <SelectValue placeholder="Select" />
@@ -64,10 +124,10 @@ interface LoginRegisterProps {
       </CardContent>
       <CardFooter className="flex">
         {/* <Button variant="outline">Cancel</Button> */}
-        <Button className="ml-auto"> {type} </Button>
+        <Button className="ml-auto" onClick={handleClick} > {type} </Button>
       </CardFooter>
     </Card>
-  )
-}
+  );
+};
 
-export default LoginRegister
+export default LoginRegister;

@@ -1,9 +1,10 @@
 "use client";
 import ProtectedRoute from "@/components/pagecomponents/ProtectedRoute";
-import { resolve } from "path";
-import { useEffect } from "react";
+// import { resolve } from "path";
+// import { useEffect } from "react";
+import Home from "./../components/Home/Home"
 
-export default function Home() {
+export default function Page() {
   // function WalkDog() {
   //   return new Promise((resolve, reject) => {
   //     setTimeout(() => {

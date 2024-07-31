@@ -1,10 +1,17 @@
 import LoginRegister from "@/components/LoginRegister/LoginRegister";
+import React from "react";
 
+interface LoginProps{
+setIsSuccess: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-export default function Login() {
+const Login: React.FC<LoginProps>=({setIsSuccess})=> {
   const type = "Login";
+  const url="/api/token"
 
   return (
-    <LoginRegister {...{type}} />
+    <LoginRegister {...{type,url,setIsSuccess}} />
   )
 }
+
+export default Login;

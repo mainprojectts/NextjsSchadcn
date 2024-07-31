@@ -3,5 +3,6 @@ import React from "react";
 
 export default function page() {
   const type = "Register";
-  return <LoginRegister {...{ type }} />;
+  const url = "api/user/register/"
+  return <LoginRegister {...{ type,url }} />;
 }
