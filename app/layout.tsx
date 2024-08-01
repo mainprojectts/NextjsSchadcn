@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import NavigationMenuDemo from "@/components/MainNav/Navbar";
 import { Toaster } from "@/components/ui/sonner"
+import { StoreProvider } from "@/store/StoreProvider";
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -19,7 +20,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <StoreProvider>
+<html lang="en">
       <body className={inter.className}>
         <ThemeProvider
           attribute="class"
@@ -33,6 +35,8 @@ export default function RootLayout({
           {children}
         </ThemeProvider>
       </body>
-    </html>
+    </html> 
+    </StoreProvider>
+    
   );
 }
