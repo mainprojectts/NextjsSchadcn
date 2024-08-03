@@ -2,7 +2,7 @@ import { Payment } from "@/app/payments/columns";
 import api from "@/public/constants/api";
 import { Constants } from "@/public/constants/constants";
 import { setOnsuccess } from "@/store/SuccessChange";
-import { useDispatch } from "react-redux";
+import { toast } from "sonner";
 
 interface Noteinter{
     id: string
@@ -10,9 +10,8 @@ interface Noteinter{
     created_at: string
     title: string
 }
-
-const useTable=async(note:Noteinter)=>{
-    const dispatch=useDispatch()
+type setChangeType=()=>void
+const useTable = async (note: Noteinter, setChange: setChangeType): Promise<void> => {
     console.log(note,'checkinguserrr');
     const repsonseData=await api.delete(Constants.notes,{
         data:{
@@ -20,7 +19,14 @@ const useTable=async(note:Noteinter)=>{
         }
        
     })  
-    dispatch(setOnsuccess()) 
+    if(repsonseData.data.status===1){
+        setChange()
+        toast.dismiss()
+        toast(repsonseData.data.message)
+
+    }
+    console.log(repsonseData.data.message,'checkresposedat');
+    
 
  
 

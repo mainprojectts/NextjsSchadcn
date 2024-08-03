@@ -30,17 +30,20 @@ import {
   } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { useState } from "react"
+import { SheetSide } from "@/components/Shadcn/Sheet"
 
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  setChange:()=>void
 
 }
 
 export function DataTable<TData, TValue,>({
   columns,
   data,
+  setChange
 }: DataTableProps<TData, TValue>) {
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
@@ -74,7 +77,7 @@ export function DataTable<TData, TValue,>({
 
   return (
     <div>
-         <div className="flex items-center py-4">
+         <div className="flex items-center py-4 ">
         <Input
           placeholder="Filter title..."
           value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
@@ -83,6 +86,8 @@ export function DataTable<TData, TValue,>({
           }
           className="max-w-sm"
         />
+                  <SheetSide setChange={setChange} />
+
              <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
