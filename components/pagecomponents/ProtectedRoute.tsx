@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from "react";
 import { Constants } from "../../public/constants/constants";
 import { jwtDecode } from "jwt-decode";

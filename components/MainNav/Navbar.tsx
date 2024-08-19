@@ -16,16 +16,16 @@ import {
 import { ThemeToggle } from "../theme-toggle";
 import { useTheme } from "next-themes";
 import React, { useEffect, useState } from "react";
-
-
-
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+// import { setOnsuccess } from "@/store/SuccessChange";
 
 const components: { title: string; href: string; description: string }[] = [
   {
-    title: "Alert Dialog",
-    href: "/docs/primitives/alert-dialog",
+    title: "Products",
+    href: "/products",
     description:
-      "A modal dialog that interrupts the user with important content and expects a response.",
+      "Explore our wide range of cutting-edge electronics, designed to enhance your everyday life. From the latest smartphones and laptops to state-of-the-art home entertainment systems, our collection features top brands and the most advanced technology available.",
   },
   {
     title: "Hover Card",
@@ -59,21 +59,40 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export default function NavigationMenuDemo() {
-  const {theme}=useTheme()
-  const [color,setColor]=useState<string | undefined >(undefined)
-  useEffect(()=>{
-if(theme=="dark"){
-  setColor("white")
-}else{
-  setColor("dark")
-}
-  },[theme])
+  const router = useRouter();
+  const dispatch = useDispatch();
 
-console.log(theme,'checkThemee');
+  const { theme } = useTheme();
+  const [color, setColor] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (theme == "dark") {
+      setColor("white");
+    } else if (theme == "white") {
+      setColor("dark");
+    } else {
+      setColor("dark");
+    }
+  }, [theme]);
+
+  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault(); // Prevent the default link behavior if needed
+    // Your custom logic here
+    console.log("Link clicked!");
+    localStorage.clear();
+
+    window.location.reload();
+
+    // Navigate to the target route
+  };
+
+  console.log(theme, "checkThemee");
   return (
     <div className="border-b p-3 flex items-center ">
-      <div className="flex items-center w-[15vw] justify-between">
-      <svg
+      <div style={{cursor:"pointer"}} onClick={()=>{
+        router.push("/")
+      }} className="flex items-center w-[15vw] justify-between">
+        <svg
           xmlns="http://www.w3.org/2000/svg"
           x="0px"
           y="0px"
@@ -86,9 +105,8 @@ console.log(theme,'checkThemee');
         </svg>
         <h2 className="text-lg font-semibold">DCX Limited</h2>
       </div>
-     
+
       <NavigationMenu className="mx-auto">
-        
         <NavigationMenuList className="">
           <NavigationMenuItem>
             <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
@@ -125,7 +143,7 @@ console.log(theme,'checkThemee');
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+            <NavigationMenuTrigger>Category</NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
                 {components.map((component) => (
@@ -142,8 +160,11 @@ console.log(theme,'checkThemee');
           </NavigationMenuItem>
           <NavigationMenuItem>
             <Link href="/docs" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                Documentation
+              <NavigationMenuLink
+                className={navigationMenuTriggerStyle()}
+                onClick={handleClick}
+              >
+                Logout
               </NavigationMenuLink>
             </Link>
           </NavigationMenuItem>
@@ -157,23 +178,27 @@ console.log(theme,'checkThemee');
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
   React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, ...props }, ref) => {
+>(({ className, title, children, href, ...props }, ref) => {
   return (
     <li>
       <NavigationMenuLink asChild>
-        <a
-          ref={ref}
-          className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
-          )}
-          {...props}
-        >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-            {children}
-          </p>
-        </a>
+        {href && (
+          <Link href={href} passHref legacyBehavior>
+            <a
+              ref={ref}
+              className={cn(
+                "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                className
+              )}
+              {...props}
+            >
+              <div className="text-sm font-medium leading-none">{title}</div>
+              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                {children}
+              </p>
+            </a>
+          </Link>
+        )}
       </NavigationMenuLink>
     </li>
   );
