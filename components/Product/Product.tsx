@@ -12,20 +12,28 @@ import { Constants } from "@/public/constants/constants";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { useRouter } from "next/navigation";
 
 interface Product {
   image: string;
   name: string;
   description: string;
   price: number;
+  rating:number;
+  id:number;
 }
 
 export function ProductCard() {
   const [Products, setProducts] = useState<Product[]>([]);
+  const router=useRouter()
 
   useEffect(() => {
     api
-      .get(Constants.products)
+      .get(Constants.products,{
+       params:{
+        type:"all"
+       }
+      })
       .then((res) => {
         console.log(res);
         if (res.data.status === 1) {
@@ -49,7 +57,7 @@ export function ProductCard() {
       {Products?.map((value, index) => {
   console.log(value.image);
 
-  const renderStars = (rating) => {
+  const renderStars = (rating:number) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       stars.push(
@@ -79,7 +87,9 @@ export function ProductCard() {
       className={`md:basis-1/2 lg:basis-1/3 pl-10 pr-10`}
     >
       <div className="p-1">
-        <Card>
+        <Card onClick={()=>{
+          router.push(`products/${value.id}`)
+        }}>
           <CardContent
             className="flex flex-col aspect-square items-center justify-center p-6"
             style={{ aspectRatio: "1.8/3" }}
