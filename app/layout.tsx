@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner"
 import { StoreProvider } from "@/store/StoreProvider";
 
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
