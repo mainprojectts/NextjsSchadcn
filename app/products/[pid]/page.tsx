@@ -27,6 +27,7 @@ interface ProductImage {
     image: string;
     images: ProductImage[];
     rating: number;
+    stock:number;
   }
   
 export default function page({ params: { pid } }: Params) {

@@ -13,6 +13,8 @@ import { Constants } from "@/public/constants/constants";
 import { Input } from "../ui/input";
 import Styles from "@/public/styles/global.module.css";
 import { Button } from "../ui/button";
+import api from "@/public/constants/api";
+import { toast } from "sonner";
 
 interface ProductImage {
   id: number;
@@ -31,6 +33,7 @@ interface Product {
   image: string;
   images: ProductImage[];
   rating: number;
+  stock:number;
 }
 interface ProductProps {
   Products: Product;
@@ -46,12 +49,31 @@ export function ProductfullWidth({ Products }: ProductProps) {
   const [Quantity, setQuantity] = React.useState(1);
 
   const ChangeQuantity = (value: string) => {
-    if (value === "increment") setQuantity((prev) => prev + 1);
+    if (value === "increment"&& Quantity<Products.stock) setQuantity((prev) => prev + 1);
 
     if (value === "decrement" && Quantity > 1) setQuantity((prev) => prev - 1);
   };
+  const addToCart = () => {
+    api
+      .post(Constants.cart, [
+        {
+          cart_product: Products.id,
+          quantity: Quantity,
+        },
+      ])
+      .then((res) => {
+        console.log(res, "checkresponse");
+        if (res.data.status === 1) {
+          toast.success(res.data.message);
+        } else {
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
-  console.log(images, "checksingleproduct");
+  console.log(Products, "checksingleproduct");
   return (
     <div className="w-10/12 mx-auto h-auto">
       <div className="flex mt-20 ">
@@ -67,7 +89,7 @@ export function ProductfullWidth({ Products }: ProductProps) {
               {images.map((value, index) => (
                 <CarouselItem
                   key={index}
-                  className="pt-1 md:basis-1/2 lg:basis-1/3"
+                  className="pt-1 md:basis-1/4 lg:basis-1/3"
                   onClick={() => handleImageClick(value)}
                 >
                   <div className="p-1">
@@ -89,7 +111,8 @@ export function ProductfullWidth({ Products }: ProductProps) {
             <CarouselNext />
           </Carousel>
         </div>
-        <Carousel ref={carouselRef} className="w-1/3 ml-28">
+        <Carousel ref={carouselRef} className="w-1/3 lg:ml-28 md:ml-3">
+          {" "}
           <CarouselContent>
             {/* {images.map((value, index) => ( */}
             <CarouselItem key={1}>
@@ -166,7 +189,14 @@ export function ProductfullWidth({ Products }: ProductProps) {
                 clipRule="evenodd"
               />
             </svg>
-            <Button className="ml-2">Add To Cart</Button>
+            <Button
+              className="ml-2"
+              onClick={() => {
+                addToCart();
+              }}
+            >
+              Add To Cart
+            </Button>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

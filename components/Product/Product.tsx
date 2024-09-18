@@ -97,11 +97,11 @@ export function ProductCard() {
             {/* <span className="text-3xl font-semibold">{index + 1}</span> */}
             {value?.image && (
               <div className=" basis-1/2">
-                <Image
+                <img
                   src={`${Constants.PORT}${value?.image}`}
                   alt="image"
-                  width={100}
-                  height={100}
+                  // width={100}
+                  // height={100}
                 />
               </div>
             )}

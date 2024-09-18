@@ -9,5 +9,6 @@ export const Constants={
     login:"api/token",
     refresh:"api/token/refresh",
     notes:"api/notes/",
-    products:"api/product/"
+    products:"api/product/",
+    cart:"api/cart/"
 }
