@@ -84,7 +84,7 @@ export function ProductCard() {
   return (
     <CarouselItem
       key={index}
-      className={`md:basis-1/2 lg:basis-1/3 pl-10 pr-10`}
+      className={`md:basis-1/2 lg:basis-1/3 pl-10 pr-10 cursor-pointer`}
     >
       <div className="p-1">
         <Card onClick={()=>{
@@ -100,6 +100,7 @@ export function ProductCard() {
                 <img
                   src={`${Constants.PORT}${value?.image}`}
                   alt="image"
+                  style={{height:"215px"}}
                   // width={100}
                   // height={100}
                 />

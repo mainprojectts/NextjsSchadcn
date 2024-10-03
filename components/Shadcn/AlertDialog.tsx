@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
-interface Noteinter{
+interface   Noteinter{
     id: string
     content: number
     created_at: string

@@ -10,5 +10,6 @@ export const Constants={
     refresh:"api/token/refresh",
     notes:"api/notes/",
     products:"api/product/",
-    cart:"api/cart/"
+    cart:"api/cart/",
+    wishlist:"api/wishlist/",
 }

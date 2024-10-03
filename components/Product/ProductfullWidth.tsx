@@ -34,12 +34,15 @@ interface Product {
   images: ProductImage[];
   rating: number;
   stock:number;
+  is_wishlist:boolean;
 }
 interface ProductProps {
   Products: Product;
+  setOnSuccess: (value: boolean | ((prev: boolean) => boolean)) => void;
+
 }
 
-export function ProductfullWidth({ Products }: ProductProps) {
+export function ProductfullWidth({ Products,setOnSuccess }: ProductProps) {
   const images = Products?.images;
   const carouselRef = React.useRef<HTMLDivElement>(null);
   const [selectedImage, setSelectedImages] = React.useState(images[0]);
@@ -54,13 +57,14 @@ export function ProductfullWidth({ Products }: ProductProps) {
     if (value === "decrement" && Quantity > 1) setQuantity((prev) => prev - 1);
   };
   const addToCart = () => {
+    toast.dismiss()
     api
-      .post(Constants.cart, [
+      .post(Constants.cart, 
         {
           cart_product: Products.id,
           quantity: Quantity,
         },
-      ])
+      )
       .then((res) => {
         console.log(res, "checkresponse");
         if (res.data.status === 1) {
@@ -69,9 +73,54 @@ export function ProductfullWidth({ Products }: ProductProps) {
         }
       })
       .catch((error) => {
+        toast.error(error.response.data.message);
         console.log(error);
       });
   };
+  const Addtowishlist=()=>{
+    toast.dismiss()
+    api.post(Constants.wishlist,{
+      product:Products.id
+    }).then((res)=>{
+      if(res.data.status===1){
+        toast.success(res.data.message)
+        setOnSuccess((prev)=>!prev)
+      }
+      else{
+        toast.error(res.data.message)
+      }
+    }).catch((error)=>{
+      console.log(error.response.data.message)
+      if(error.response.data.message){
+        toast.error(error.response.data.message)
+      }else{
+      toast.error("Some Error Occured !")
+      }
+    })
+  }
+  const Removefromwishlist=()=>{
+    toast.dismiss()
+    api.delete(Constants.wishlist,{params:{
+      product:Products.id
+    }
+     
+    }).then((res)=>{
+      if(res.data.status===1){
+        toast.success(res.data.message)
+        setOnSuccess((prev)=>!prev)
+      }
+      else{
+        toast.error(res.data.message)
+      }
+    }).catch((error)=>{
+      console.log(error.response.data.message)
+      if(error.response.data.message){
+        toast.error(error.response.data.message)
+      }else{
+      toast.error("Some Error Occured !")
+      }
+    })
+  }
 
   console.log(Products, "checksingleproduct");
   return (
@@ -145,7 +194,8 @@ export function ProductfullWidth({ Products }: ProductProps) {
             sed?
           </p>
           <div className="flex items-center mt-4">
-            <svg
+            {Products.stock>0?<>
+              <svg
               onClick={() => {
                 ChangeQuantity("decrement");
               }}
@@ -197,13 +247,20 @@ export function ProductfullWidth({ Products }: ProductProps) {
             >
               Add To Cart
             </Button>
+            </>:<p>Out of Stock</p>}
+            
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              fill="none"
+              fill={`${Products.is_wishlist?"black":"none"}`}
               viewBox="0 0 24 24"
               strokeWidth={2}
               stroke="currentColor"
-              className="size-10 ml-2"
+              className="size-10 ml-2 cursor-pointer"
+              onClick={()=>{
+                Products.is_wishlist?
+                Removefromwishlist():
+                Addtowishlist()
+              }}
             >
               <path
                 strokeLinecap="round"

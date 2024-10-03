@@ -28,12 +28,13 @@ interface ProductImage {
     images: ProductImage[];
     rating: number;
     stock:number;
+    is_wishlist:boolean
   }
   
 export default function page({ params: { pid } }: Params) {
   console.log(pid);
   const [Products,SetProducts]=useState<Product>()
-
+  const [onSuccess, setOnSuccess] = useState<boolean>(false);
   useEffect(() => {
     api
       .get(Constants.products, {
@@ -51,12 +52,12 @@ export default function page({ params: { pid } }: Params) {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [onSuccess]);
   console.log(Products,'checkproductss');
   
   return (
     <ProtectedRoute>
-      {Products && <ProductfullWidth {...{Products}} />}
+      {Products && <ProductfullWidth {...{Products,setOnSuccess}} />}
     </ProtectedRoute>
   );
 }

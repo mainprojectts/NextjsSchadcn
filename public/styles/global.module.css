@@ -6,3 +6,6 @@
 .no-spinner[type='number'] {
     -moz-appearance: textfield;
   } 
+  .smalltext{
+    font-size: 10px;
+  }
