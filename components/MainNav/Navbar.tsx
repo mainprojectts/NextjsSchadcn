@@ -19,6 +19,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { SheetRight } from "../Shadcn/SheetRight";
+import { authsign, authsignout } from "../Serveractions/Serveraction";
 // import { setOnsuccess } from "@/store/SuccessChange";
 
 const components: { title: string; href: string; description: string }[] = [
@@ -76,9 +77,12 @@ export default function NavigationMenuDemo() {
     }
   }, [theme]);
 
-  const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClick = async(event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault(); // Prevent the default link behavior if needed
     // Your custom logic here
+    await authsignout()
+    
+
     console.log("Link clicked!");
     localStorage.clear();
 

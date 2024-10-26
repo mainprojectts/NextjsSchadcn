@@ -12,4 +12,5 @@ export const Constants={
     products:"api/product/",
     cart:"api/cart/",
     wishlist:"api/wishlist/",
+    googlelogin:"api/googlelogin"
 }

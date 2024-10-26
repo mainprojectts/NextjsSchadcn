@@ -6,18 +6,19 @@ import api from "@/public/constants/api";
 import { useRouter } from "next/navigation";
 import Login from "../Login/Login";
 import LoadingSkeleton from "../LoadingSkeleton/LoadingSkeleton";
+import { useSelector } from "react-redux";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const [isAuthorized, setIsAuthorized] = useState<boolean>(false);
   const [isSuccess, setIsSuccess] = useState<boolean>(false);
   const router = useRouter();
   const [isLoading, setIsloading] = useState<boolean>(false);
-
-  console.log(isAuthorized, "checkauthorization");
+const onGlobalsuccess=useSelector((state)=>state?.success?.value)
+  console.log(onGlobalsuccess, "checkauthorization");
 
   useEffect(() => {
     auth().catch((error) => setIsAuthorized(false));
-  }, [isSuccess]);
+  }, [onGlobalsuccess]);
 
   const auth = async () => {
     const token = localStorage.getItem(Constants.ACCESS_TOKEN);

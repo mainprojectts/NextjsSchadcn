@@ -1,6 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { googleSignIn } from "../Serveractions/Serveraction";
+import { authsign, googleSignIn } from "../Serveractions/Serveraction";
 import { signIn,auth,signOut } from "@/auth"
+import { useEffect } from "react";
+import { Constants } from "@/public/constants/constants";
+import { useRouter } from "next/navigation";
+import { useDispatch } from "react-redux";
+import { setOnsuccess } from "@/store/SuccessChange";
 
 const GoogleIcon = ({ className }: { className?: string }) => (
     <svg className={className} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -11,10 +16,33 @@ const GoogleIcon = ({ className }: { className?: string }) => (
     </svg>
   )
 export default  function SignIn() {
+const router=useRouter()
+const dispatch=useDispatch()
+ useEffect(()=>{
+  async function Auth(){
+    const session=await authsign()
+    console.log(session?.accessToken,'checksession')
+    if(session?.accessToken){
+      localStorage.setItem(Constants.ACCESS_TOKEN,session.accessToken.access)
+      localStorage.setItem(Constants.REFRESH_TOKEN,session.accessToken.refresh)
+      console.log("checkfinishedlocalstorage",session?.accessToken.access)
+      dispatch(setOnsuccess())
+      // window.location.reload()
  
+      
+    }
+    
+   
+    const user=session?.user
+  }
+  Auth()
+
+ },[])
+  
   const handleSignIn = async (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     await googleSignIn(); // Call the server-side function
+   
   };
 
   return (

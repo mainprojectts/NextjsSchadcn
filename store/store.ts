@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit'
 import SuccessChange from "./SuccessChange"
+import { globalSuccesschange } from './globalSuccess'
 
 export const store = configureStore({
   reducer: {
     success:SuccessChange,
+    globalsuccess:globalSuccesschange,
   },
 })
 
