@@ -30,6 +30,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       // Attach token data to the session
         // Attach token data to the session object
         console.log(token,"tokennnnnnnnn")
+        console.log(session,"sessionnnnn")
     session["accessToken"] = await token
 
     
