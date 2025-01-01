@@ -80,11 +80,13 @@ export default function NavigationMenuDemo() {
   const handleClick = async(event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault(); // Prevent the default link behavior if needed
     // Your custom logic here
-    await authsignout()
+    await authsignout().then((res)=>{
+        localStorage.clear();
+    })
     
 
     console.log("Link clicked!");
-    localStorage.clear();
+
 
     window.location.reload();
 

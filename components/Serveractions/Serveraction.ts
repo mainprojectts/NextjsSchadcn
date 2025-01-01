@@ -5,7 +5,9 @@ import { signIn,auth,signOut } from "@/auth";
 
 export async function googleSignIn() {
   const session=await auth()
+ 
   await signIn("google");
+  // return session
   
 }
 export async function authsign(){

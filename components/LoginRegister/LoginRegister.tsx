@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import * as React from "react";
 import { useState } from "react";
 
@@ -23,23 +23,26 @@ import { Label } from "@/components/ui/label";
 import api from "@/public/constants/api";
 import { useRouter } from "next/navigation";
 import { Constants } from "@/public/constants/constants";
-import { GithubIcon } from 'lucide-react'
+import { GithubIcon } from "lucide-react";
 import SignIn from "../Auth/Auth";
+import axios from "axios";
 interface LoginRegisterProps {
   type: string;
-  url:string;
-  setIsSuccess?: React.Dispatch<React.SetStateAction<boolean>> ;
+  url: string;
+  setIsSuccess?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 type UserType = {
   username: string;
   password: string;
 };
 
-
-
-const LoginRegister: React.FC<LoginRegisterProps> = ({ type,url,setIsSuccess }) => {
+const LoginRegister: React.FC<LoginRegisterProps> = ({
+  type,
+  url,
+  setIsSuccess,
+}) => {
   const [user, SetUser] = useState<UserType | null>(null);
-  const router=useRouter()
+  const router = useRouter();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = event.target;
@@ -51,39 +54,36 @@ const LoginRegister: React.FC<LoginRegisterProps> = ({ type,url,setIsSuccess }) 
       return { ...prev, [id]: value };
     });
   };
-  console.log(process.env,'log');
+  console.log(process.env, "log");
 
-  const handleClick= async(event:React.MouseEvent<HTMLButtonElement>)=>{
-      event.preventDefault()
-      if(user && user.username && user.password){
-        try{
-          const response=await api.post(url,{
-            username:user.username,
-            password:user.password
-          })
-          if(type==="Login"){
-            localStorage.setItem(Constants.ACCESS_TOKEN,response.data.access)
-            localStorage.setItem(Constants.REFRESH_TOKEN,response.data.refresh)
-            if(setIsSuccess){
-              setIsSuccess(prev=>!prev) 
-            }
+  
+
+  const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (user && user.username && user.password) {
+      try {
+        const response = await api.post(url, {
+          username: user.username,
+          password: user.password,
+        });
+        if (type === "Login") {
+          localStorage.setItem(Constants.ACCESS_TOKEN, response.data.access);
+          localStorage.setItem(Constants.REFRESH_TOKEN, response.data.refresh);
+          if (setIsSuccess) {
+            setIsSuccess((prev) => !prev);
           }
-          else if(type=="Register"){
-            router.push("/register")
-          }
-          console.log(response);
-          
+        } else if (type == "Register") {
+          router.push("/register");
         }
-        catch(error){
-          console.log(`Error during api call ${error}`);
-          
-        }
-      }else{
-        console.log(`Username and password are required`);
-        
+        console.log(response);
+      } catch (error) {
+        console.log(`Error during api call ${error}`);
       }
-
-  }
+    } else {
+      console.log(`Username and password are required`);
+    }
+  };
+  
 
   console.log(user, "checkUserr");
 
@@ -125,16 +125,16 @@ const LoginRegister: React.FC<LoginRegisterProps> = ({ type,url,setIsSuccess }) 
             </div>
           </div>
         </form>
-      </CardContent> 
+      </CardContent>
       <CardFooter className="flex flex-col gap-2">
         {/* <Button variant="outline">Cancel</Button> */}
-        <Button className="ml-auto w-full" onClick={handleClick} > {type} </Button>
+        <Button className="ml-auto w-full" onClick={handleClick}>
+          {" "}
+          {type}{" "}
+        </Button>
         <div className="flex w-full gap-2">
-          <SignIn/>
-          <Button 
-            variant="outline" 
-            className="w-full"
-          >
+          <SignIn />
+          <Button variant="outline" className="w-full">
             <GithubIcon className="mr-2 h-4 w-4" />
             GitHub
           </Button>

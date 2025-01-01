@@ -9,15 +9,15 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   callbacks: {
     async jwt({ token, account, profile }) {
       // If this is the initial sign-in after Google login
-     console.log(account,'checkaccountttt')
-     if(account?.provider==="google"){
+     console.log(account,profile,'checkaccountttt')
+     if(account&&account?.provider==="google"){
       try{
         const response=await axios.post(`${Constants.PORT}/${Constants.googlelogin}/`,{
           id_token:account?.id_token
         })
         token.access=await response.data.access
         token.refresh=await response.data.refresh
-        console.log(response.data.refresh,'checktokenresponse')
+        console.log(response,'checktokenresponse2')
       }catch(error){
         console.log("error of google login",error)
       }
@@ -31,7 +31,10 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         // Attach token data to the session object
         console.log(token,"tokennnnnnnnn")
         console.log(session,"sessionnnnn")
-    session["accessToken"] = await token
+        if(token){
+          session["accessToken"] = await token
+        }
+ 
 
     
       return session;
