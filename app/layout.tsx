@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import NavigationMenuDemo from "@/components/MainNav/Navbar";
 import { Toaster } from "@/components/ui/sonner"
 import { StoreProvider } from "@/store/StoreProvider";
+import { SessionProvider } from "next-auth/react";
 
 
 
@@ -24,6 +25,7 @@ export default function RootLayout({
     <StoreProvider>
 <html lang="en">
       <body className={inter.className}>
+      <SessionProvider>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -35,6 +37,7 @@ export default function RootLayout({
           <Toaster />
           {children}
         </ThemeProvider>
+        </SessionProvider>
       </body>
     </html> 
     </StoreProvider>

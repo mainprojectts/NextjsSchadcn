@@ -23,7 +23,6 @@ import { Label } from "@/components/ui/label";
 import api from "@/public/constants/api";
 import { useRouter } from "next/navigation";
 import { Constants } from "@/public/constants/constants";
-import { GithubIcon } from "lucide-react";
 import SignIn from "../Auth/Auth";
 import axios from "axios";
 interface LoginRegisterProps {
@@ -132,13 +131,10 @@ const LoginRegister: React.FC<LoginRegisterProps> = ({
           {" "}
           {type}{" "}
         </Button>
-        <div className="flex w-full gap-2">
+        {/* <div className="flex w-full gap-2"> */}
           <SignIn />
-          <Button variant="outline" className="w-full">
-            <GithubIcon className="mr-2 h-4 w-4" />
-            GitHub
-          </Button>
-        </div>
+         
+        {/* </div> */}
       </CardFooter>
     </Card>
   );

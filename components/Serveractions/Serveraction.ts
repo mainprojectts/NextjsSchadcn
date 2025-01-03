@@ -10,10 +10,19 @@ export async function googleSignIn() {
   // return session
   
 }
+export async function gitHubsignin() {
+  const session=await auth()
+ 
+  await signIn("github");
+  // return session
+  
+}
 export async function authsign(){
     const session=await auth()
     return session
 }
+
+
 export async function authsignout(){
   await signOut()
 }

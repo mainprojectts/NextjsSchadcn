@@ -1,11 +1,13 @@
 import { Button } from "@/components/ui/button";
-import { authsign, googleSignIn } from "../Serveractions/Serveraction";
+import { authsign, gitHubsignin, googleSignIn } from "../Serveractions/Serveraction";
 import { signIn,auth,signOut } from "@/auth"
 import { useEffect } from "react";
 import { Constants } from "@/public/constants/constants";
 import { useRouter } from "next/navigation";
 import { useDispatch } from "react-redux";
 import { setOnsuccess } from "@/store/SuccessChange";
+import { useSession } from "next-auth/react"
+import { GithubIcon } from "lucide-react";
 
 const GoogleIcon = ({ className }: { className?: string }) => (
     <svg className={className} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -18,6 +20,8 @@ const GoogleIcon = ({ className }: { className?: string }) => (
 export default  function SignIn() {
 const router=useRouter()
 const dispatch=useDispatch()
+const { data: session } = useSession();
+console.log(session,'checkingsession')
  useEffect(()=>{
   async function Auth(){
     const session=await authsign()
@@ -44,13 +48,22 @@ const dispatch=useDispatch()
     await googleSignIn(); // Call the server-side function
    
   };
+  const handleSignIngithub = async (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    await gitHubsignin(); // Call the server-side function
+   
+  };
 
   return (
-    <form>
+    <form className="flex w-full gap-2" >
       <Button variant="outline" className="w-full" onClick={handleSignIn}>
         <GoogleIcon className="mr-2 h-4 w-4" />
         Google
       </Button>
+      <Button variant="outline" className="w-full" onClick={handleSignIngithub} >
+            <GithubIcon className="mr-2 h-4 w-4" />
+            GitHub
+          </Button>
     </form>
   );
 }
